@@ -27,7 +27,8 @@ export default function App() {
   //загальнf кількість зібраних відгуків
   const countTotalFeedback = () =>
     good + neutral + bad;
-  //відсоток позитивних відгуків
+  
+    //відсоток позитивних відгуків
   const countPositiveFeedbackPercentage = () =>
     Math.round((good * 100) / countTotalFeedback());
   
