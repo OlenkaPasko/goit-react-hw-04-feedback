@@ -1,47 +1,59 @@
-import React, { Component } from 'react';
+import { useState } from 'react';
 
 import { Section } from './Section/Section';
 import { Statistics } from './Statistics/Statistics';
 import { FeedbackOptions } from './FeedbackOptions/FeedbackOptions';
 
 
-export class App extends Component {
+export default function App() {
+ const [good, setGood] = useState(0);
+  const [neutral, setNeutral] = useState(0);
+  const [bad, setBad] = useState(0);
+  
   //початковий стан
-  state = {
-    good: 0,
-    neutral: 0,
-    bad: 0,
-  };
+ // state = {
+ //   good: 0,
+ //   neutral: 0,
+ //   bad: 0,
+ // };
 
-  leaveFeedback = event => {
-    this.setState({ [event]: this.state[event] + 1 });
+const leaveFeedback = event => {
+   setGood(prevState => event.prevState + 1);
+   setBad(prevState => event.prevState + 1);
+   setNeutral(prevState => event.prevState + 1);
+ //  this.setState({ [event]: this.state[event] + 1 });
   };
-
+  
+  
+  
   //загальнf кількість зібраних відгуків
-  countTotalFeedback = () => {
-    return this.state.bad + this.state.neutral + this.state.good;
-  };
+  const countTotalFeedback = () => 
+  //  return this.state.bad + this.state.neutral + this.state.good;
+    good + neutral + bad;
 
   //відсоток позитивних відгуків
-  countPositiveFeedbackPercentage = () => {
-    let percentage = 0;
-    if (this.countTotalFeedback() !== 0) {
-      percentage = Number.parseInt(
-        (this.state.good / this.countTotalFeedback()) * 100
-      );
-    }
-    return percentage;
-  };
+  const countPositiveFeedbackPercentage = () =>
+    Math.round((good * 100) / countTotalFeedback());
+  
+  //{
+  //  let percentage = 0;
+  //  if (this.countTotalFeedback() !== 0) {
+  //    percentage = Number.parseInt(
+  //      (this.state.good / this.countTotalFeedback()) * 100
+  //    );
+  //  }
+  //  return percentage;
+  //};
 
   //рендер всього контенту
-  render() {
-    const { good, neutral, bad } = this.state;
+ // render() {
+   // const { good, neutral, bad } = this.state;
     return (
       <div>
         <Section title="Please leave feedback">
           <FeedbackOptions
-            options={Object.keys(this.state)}
-            onLeaveFeedback={this.leaveFeedback}
+            options={Object.keys({ good, neutral, bad })}
+            onLeaveFeedback={leaveFeedback}
           />
         </Section>
         <Section title="Statistics">
@@ -49,13 +61,11 @@ export class App extends Component {
             good={good}
             neutral={neutral}
             bad={bad}
-            total={this.countTotalFeedback(this.state)}
-            positivePercentage={this.countPositiveFeedbackPercentage(
-              this.state
-            )}
+            total={countTotalFeedback()}
+            positivePercentage={countPositiveFeedbackPercentage()}
           ></Statistics>
         </Section>
       </div>
     );
-  }
+  //}
 }
